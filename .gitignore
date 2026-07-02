@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Build outputs
+dist/
+build/
+
+# CNKI runtime state and downloaded files
+skill/cnki-search/cnki-workspaces/
+cnki-workspaces/
+cnki-downloads/
+cnki-live-downloads/
+
+# Live-test artifacts
+tests/live/*.latest.json
+tests/live/*.latest.md
+tests/live/*_current*.json
+tests/live/download-*/
+tests/live/*downloads*/
+
+# Local credentials or cookies
+.cnki-cookie*.txt
+.cnki-cookie*.json
+*.cookie
+*.cookies
+
+# Claude local state
+.claude/settings.local.json
+.claude/skill-learning/
+
+# Scratch
+tmp/
+tmp_*
+errlog.md
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
