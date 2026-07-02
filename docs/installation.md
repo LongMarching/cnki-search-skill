@@ -8,22 +8,43 @@ Clone this repository:
 git clone https://github.com/LongMarching/cnki-search-skill.git
 ```
 
-From the target Claude Code project root, run:
+Clone it inside the target Claude Code project and run the installer from the
+clone:
 
 ```bash
-python /path/to/cnki-search-skill/install.py
+cd /path/to/claude-project
+git clone https://github.com/LongMarching/cnki-search-skill.git
+cd cnki-search-skill
+python install.py
 ```
 
-Or pass the target explicitly:
+The default installer target is the clone directory's parent, so this writes to:
+
+```text
+/path/to/claude-project/.claude/
+```
+
+The clone can also live inside the target project's `.claude` directory:
+
+```bash
+cd /path/to/claude-project/.claude
+git clone https://github.com/LongMarching/cnki-search-skill.git
+cd cnki-search-skill
+python install.py
+```
+
+In this layout, the installer detects the surrounding `.claude` directory and
+uses `/path/to/claude-project` as the target root.
+
+If the clone lives somewhere else, pass the target explicitly:
 
 ```bash
 python /path/to/cnki-search-skill/install.py --target /path/to/claude-project
 ```
 
-The target must be your Claude Code project, not the cloned
-`cnki-search-skill` repository. If the target resolves to the clone itself, the
-installer exits with an error instead of writing into the wrong `.claude`
-directory.
+If an explicit target resolves to the cloned `cnki-search-skill` repository
+itself, the installer exits with an error instead of writing into the wrong
+`.claude` directory.
 
 The installer writes:
 

@@ -63,6 +63,56 @@ class InstallerTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             installer.install(REPO_ROOT)
 
+    def test_default_target_inside_clone_is_clone_parent(self):
+        inferred = installer.infer_target_root(source_root=REPO_ROOT, cwd=REPO_ROOT, explicit_target=None)
+
+        self.assertEqual(inferred, REPO_ROOT.parent.resolve())
+
+    def test_default_target_for_clone_inside_project_claude_dir_is_project_root(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project = Path(tmp) / "project"
+            source = project / ".claude" / "cnki-search-skill"
+            cwd = source / "docs"
+
+            inferred = installer.infer_target_root(source_root=source, cwd=cwd, explicit_target=None)
+
+            self.assertEqual(inferred, project.resolve())
+
+    def test_default_target_for_clone_inside_project_claude_dir_ignores_external_cwd(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project = Path(tmp) / "project"
+            source = project / ".claude" / "cnki-search-skill"
+            external_cwd = Path(tmp) / "elsewhere"
+
+            inferred = installer.infer_target_root(source_root=source, cwd=external_cwd, explicit_target=None)
+
+            self.assertEqual(inferred, project.resolve())
+
+    def test_default_target_for_repo_root_as_project_claude_dir_is_project_root(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            project = Path(tmp) / "project"
+            source = project / ".claude"
+
+            inferred = installer.infer_target_root(source_root=source, cwd=source, explicit_target=None)
+
+            self.assertEqual(inferred, project.resolve())
+
+    def test_default_target_outside_clone_is_current_directory(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            cwd = Path(tmp)
+
+            inferred = installer.infer_target_root(source_root=REPO_ROOT, cwd=cwd, explicit_target=None)
+
+            self.assertEqual(inferred, cwd.resolve())
+
+    def test_explicit_target_is_used_as_given(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp)
+
+            inferred = installer.infer_target_root(source_root=REPO_ROOT, cwd=REPO_ROOT, explicit_target=str(target))
+
+            self.assertEqual(inferred, target.resolve())
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -179,16 +179,34 @@ def install(target_root: Path, source_root: Path = REPO_ROOT) -> dict:
     return summary
 
 
+def infer_target_root(source_root: Path = REPO_ROOT, cwd: Path | None = None, explicit_target: str | None = None) -> Path:
+    if explicit_target and explicit_target.strip():
+        return Path(explicit_target).resolve()
+
+    source_root = source_root.resolve()
+    cwd = (cwd or Path.cwd()).resolve()
+    if source_root.name == ".claude":
+        return source_root.parent.resolve()
+    if source_root.parent.name == ".claude":
+        return source_root.parent.parent.resolve()
+    if cwd == source_root or source_root in cwd.parents:
+        return source_root.parent.resolve()
+    return cwd
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Install cnki-search into a Claude Code project.")
     parser.add_argument(
         "--target",
-        default=".",
-        help="Target Claude Code project root. Defaults to the current working directory.",
+        default=None,
+        help=(
+            "Target Claude Code project root. Defaults to the current working directory, "
+            "or to the containing Claude project when run inside the clone."
+        ),
     )
     args = parser.parse_args()
 
-    target_root = Path(args.target).resolve()
+    target_root = infer_target_root(explicit_target=args.target)
     try:
         summary = install(target_root)
     except ValueError as exc:

@@ -15,23 +15,43 @@ Clone this repository:
 git clone https://github.com/LongMarching/cnki-search-skill.git
 ```
 
-Run the installer from the Claude Code project that should receive the skill:
+Clone it inside the Claude Code project that should receive the skill:
 
 ```bash
 cd /path/to/your/claude-project
-python /path/to/cnki-search-skill/install.py
+git clone https://github.com/LongMarching/cnki-search-skill.git
+cd cnki-search-skill
+python install.py
 ```
 
-Or pass the target project explicitly:
+When `python install.py` is run from inside the cloned repository, the installer
+automatically installs into the containing Claude Code project, not into the
+clone's own `.claude` directory.
+
+This also works when the clone is stored inside the project's `.claude`
+directory:
+
+```bash
+cd /path/to/your/claude-project/.claude
+git clone https://github.com/LongMarching/cnki-search-skill.git
+cd cnki-search-skill
+python install.py
+```
+
+That layout still installs to:
+
+```text
+/path/to/your/claude-project/.claude/skills/cnki-search/
+```
+
+If the clone lives somewhere else, pass the target project explicitly:
 
 ```bash
 python /path/to/cnki-search-skill/install.py --target /path/to/your/claude-project
 ```
 
-Do not run `python install.py` from inside the cloned `cnki-search-skill`
-directory. The installer refuses to install into the clone itself; the target
-must be the Claude Code project where you want `.claude/skills/cnki-search/`
-to be created.
+The target is the Claude Code project where `.claude/skills/cnki-search/`
+should be created.
 
 The installer copies:
 

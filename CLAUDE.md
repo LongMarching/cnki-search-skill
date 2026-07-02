@@ -11,10 +11,12 @@ entry point is:
 python .claude/skills/cnki-search/run.py --help
 ```
 
-The top-level `install.py` must install into an external Claude Code project,
-not back into this clone. The release source is a Claude Code bundle tree:
-`.claude/agents/`, `.claude/hooks/`, `.claude/skills/`, and
-`.claude/settings.cnki-snippet.json`.
+The top-level `install.py` defaults to the containing Claude Code project when
+run inside this clone, including the `<project>/.claude/cnki-search-skill`
+layout. Explicit `--target` values must still point at an external Claude Code
+project, not this clone. The release source is a Claude Code bundle tree:
+`.claude/agents/`,
+`.claude/hooks/`, `.claude/skills/`, and `.claude/settings.cnki-snippet.json`.
 
 Commands return structured JSON. Treat `status`, `workspace_id`, `run_id`,
 `summary`, `rows`, `warnings`, and row-level errors as the contract.

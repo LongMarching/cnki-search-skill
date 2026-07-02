@@ -3,8 +3,16 @@
 Most users do not need this file. The normal install path is:
 
 ```bash
-python /path/to/cnki-search-skill/install.py --target /path/to/target-project
+cd /path/to/target-project
+git clone https://github.com/LongMarching/cnki-search-skill.git
+cd cnki-search-skill
+python install.py
 ```
+
+Running `python install.py` inside the clone installs into the clone's parent
+project. If the clone is inside `<project>/.claude/`, it installs into
+`<project>`. Use `--target /path/to/target-project` only when installing from
+another location.
 
 To build a standalone Claude Code bundle from the repository root:
 
