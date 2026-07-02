@@ -26,7 +26,7 @@ LEGACY_REMOVE_DIRS = (
     ".claude/skills/journal-workflow",
     "skills/journal-workflow",
 )
-SETTINGS_SNIPPET = ".claude/settings.json"
+SETTINGS_SNIPPET = "templates/settings.cnki-snippet.json"
 
 
 def load_json(path: Path) -> dict:
@@ -106,6 +106,15 @@ def remove_tree(path: Path) -> bool:
 
 
 def install(target_root: Path, source_root: Path = REPO_ROOT) -> dict:
+    source_root = source_root.resolve()
+    target_root = target_root.resolve()
+    if target_root == source_root:
+        raise ValueError(
+            "Refusing to install into the cloned cnki-search-skill repository itself. "
+            "Run this installer from your Claude Code project root, or pass "
+            "`--target /path/to/your/claude-project`."
+        )
+
     summary: dict[str, object] = {
         "source_root": str(source_root),
         "target_root": str(target_root),
@@ -149,9 +158,13 @@ def main() -> int:
     args = parser.parse_args()
 
     target_root = Path(args.target).resolve()
-    summary = install(target_root)
-    print(json.dumps(summary, ensure_ascii=False, indent=2))
-    return 0
+    try:
+        summary = install(target_root)
+    except ValueError as exc:
+        parser.error(str(exc))
+    else:
+        print(json.dumps(summary, ensure_ascii=False, indent=2))
+        return 0
 
 
 if __name__ == "__main__":

@@ -28,6 +28,11 @@ Or pass the target project explicitly:
 python /path/to/cnki-search-skill/install.py --target /path/to/your/claude-project
 ```
 
+Do not run `python install.py` from inside the cloned `cnki-search-skill`
+directory. The installer refuses to install into the clone itself; the target
+must be the Claude Code project where you want `.claude/skills/cnki-search/`
+to be created.
+
 The installer copies:
 
 ```text
@@ -56,6 +61,7 @@ agent/                      # Claude Code agent template
 tools/                      # optional bundle builder and bundle installer
 tests/                      # offline tests and guarded live harness
 docs/                       # installation and development notes
+templates/                  # Claude settings snippet used by install.py
 ```
 
 ## Direct Development Use

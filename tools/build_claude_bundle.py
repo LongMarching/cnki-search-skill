@@ -97,7 +97,7 @@ After install, reopen the Claude project so settings reload.
 
 
 def write_settings_snippet(bundle_root: Path) -> None:
-    src = REPO_ROOT / ".claude" / "settings.json"
+    src = REPO_ROOT / "templates" / "settings.cnki-snippet.json"
     dst = bundle_root / ".claude" / "settings.cnki-snippet.json"
     copy_file(src, dst)
 

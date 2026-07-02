@@ -20,6 +20,11 @@ Or pass the target explicitly:
 python /path/to/cnki-search-skill/install.py --target /path/to/claude-project
 ```
 
+The target must be your Claude Code project, not the cloned
+`cnki-search-skill` repository. If the target resolves to the clone itself, the
+installer exits with an error instead of writing into the wrong `.claude`
+directory.
+
 The installer writes:
 
 ```text

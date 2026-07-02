@@ -11,6 +11,7 @@ skill/cnki-search/src/core/         # state store, HTTP helpers, fieldsets
 skill/cnki-search/resources/        # packaged discipline map
 tests/                              # offline tests plus live harness
 install.py                          # clone-repo installer for Claude Code projects
+templates/settings.cnki-snippet.json
 ```
 
 ## Verification

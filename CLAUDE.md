@@ -11,6 +11,9 @@ entry point is:
 python skill/cnki-search/run.py --help
 ```
 
+The top-level `install.py` must install into an external Claude Code project,
+not back into this clone.
+
 Commands return structured JSON. Treat `status`, `workspace_id`, `run_id`,
 `summary`, `rows`, `warnings`, and row-level errors as the contract.
 
