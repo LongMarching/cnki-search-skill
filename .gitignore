@@ -12,6 +12,7 @@ build/
 .claude/cnki-workspaces/
 cnki-workspaces/
 cnki-downloads/
+cnki-search-download/
 cnki-live-downloads/
 
 # Live-test artifacts

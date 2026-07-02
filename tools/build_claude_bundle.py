@@ -78,7 +78,7 @@ The installer will:
 ### Install from another location
 
 ```bash
-python install.py --target E:/path/to/target-project
+python install.py --target /path/to/target-project
 ```
 
 After install, reopen the Claude project so settings reload.
@@ -86,7 +86,7 @@ After install, reopen the Claude project so settings reload.
 ## Validation
 
 1. Open a Claude chat in the target project root.
-2. Run `cd .claude/skills/cnki-search && python run.py search "机器学习" --page 1`
+2. Run `python .claude/skills/cnki-search/run.py search "机器学习" --page 1`
 """
     (bundle_root / "INSTALL.md").write_text(text, encoding="utf-8")
 
