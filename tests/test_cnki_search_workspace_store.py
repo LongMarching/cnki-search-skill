@@ -13,11 +13,23 @@ sys.path.insert(0, str(SKILL_DIR / "src"))
 sys.path.insert(0, str(REPO_ROOT / "tests"))
 
 from actions import _workflow_impl as workflow_core
-from core.state_store import WorkspaceLockTimeout, WorkspaceStore, parse_utc
+from core.state_store import WorkspaceLockTimeout, WorkspaceStore, default_project_root, parse_utc
 from cnki_search_test_helpers import create_workspace_run
 
 
 class WorkspaceStoreTests(unittest.TestCase):
+    def test_default_project_root_uses_parent_of_claude_directory(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            project_root = Path(tmpdir) / "project"
+            skill_root = project_root / ".claude" / "skills" / "cnki-search"
+            skill_root.mkdir(parents=True)
+
+            with mock.patch.dict(os.environ, {"CNKI_PROJECT_ROOT": ""}):
+                with mock.patch("core.state_store.WORKFLOW_DIR", str(skill_root)):
+                    resolved = default_project_root()
+
+        self.assertEqual(Path(resolved), project_root)
+
     def test_create_workspace_sets_12_hour_expiry_by_default(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             store = WorkspaceStore(tmpdir)

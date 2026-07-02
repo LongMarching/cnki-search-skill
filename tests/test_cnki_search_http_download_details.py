@@ -131,6 +131,41 @@ class HttpDetailAdapterTests(unittest.TestCase):
 
 
 class WorkspaceDownloadActionTests(unittest.TestCase):
+    def test_download_action_defaults_to_project_format_subdirectory(self):
+        for fmt, dirname in (("pdf", "PDF"), ("caj", "CAJ")):
+            with self.subTest(fmt=fmt):
+                with tempfile.TemporaryDirectory() as tmpdir:
+                    project_root = Path(tmpdir) / "project"
+                    store = WorkspaceStore(Path(tmpdir) / "store")
+                    link_field = "pdf_url" if fmt == "pdf" else "caj_url"
+                    results = [{
+                        "row_id": "row-0001",
+                        "global_rank": 1,
+                        "page_no": 1,
+                        "page_row_no": 1,
+                        "title": "标题",
+                        link_field: f"https://bar.cnki.net/bar/download/order?id={fmt}-token",
+                        "download_status": "pending",
+                    }]
+                    create_workspace_run(store, results=results)
+                    expected_dir = project_root / "cnki-search-download" / dirname
+                    direct_item = {
+                        "row_id": "row-0001",
+                        "global_rank": 1,
+                        "status": "downloaded",
+                        "format": fmt.upper(),
+                        "saved_to": str(expected_dir / f"paper.{fmt}"),
+                        "filename": f"paper.{fmt}",
+                        "download_transport": "http_direct",
+                    }
+                    with mock.patch.object(workflow_core, "default_project_root", return_value=str(project_root)):
+                        with mock.patch.object(workflow_core, "download_direct_rows", return_value=[direct_item]) as direct_download:
+                            payload = workflow_core.download_action(workspace_id="cws-test", run_id="run-test", rows=[1], fmt=fmt, store=store)
+
+                    self.assertEqual(payload["status"], "ok")
+                    self.assertEqual(Path(direct_download.call_args.kwargs["download_dir"]), expected_dir)
+                    self.assertTrue(expected_dir.is_dir())
+
     def test_download_action_uses_http_direct_and_updates_workspace(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             store = WorkspaceStore(tmpdir)

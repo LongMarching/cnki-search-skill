@@ -100,13 +100,18 @@ def _store_error_payload(action: str, exc: WorkspaceStoreError):
     return _error_payload(action, exc.code, exc.detail, **exc.extra)
 
 
-def _resolve_download_dir(download_dir=None):
+DEFAULT_DOWNLOAD_ROOT = "cnki-search-download"
+DOWNLOAD_FORMAT_DIRS = {"pdf": "PDF", "caj": "CAJ"}
+
+
+def _resolve_download_dir(download_dir=None, fmt=None):
     configured = str(download_dir or os.environ.get("CNKI_DOWNLOAD_DIR", "") or "").strip()
     if configured:
         if os.path.isabs(configured):
             return os.path.abspath(configured)
         return os.path.abspath(os.path.join(default_project_root(), configured))
-    return os.path.join(default_project_root(), "cnki-downloads")
+    fmt_dir = DOWNLOAD_FORMAT_DIRS.get(str(fmt or "").lower(), str(fmt or "PDF").upper())
+    return os.path.join(default_project_root(), DEFAULT_DOWNLOAD_ROOT, fmt_dir)
 
 
 def _normalize_authors(value):
@@ -647,7 +652,7 @@ def download_action(workspace_id=None, run_id=None, rows=None, top=None, pending
     fmt = (fmt or "pdf").lower()
     if fmt not in VALID_DOWNLOAD_FORMATS:
         return _error_payload("download", "invalid_format", f"format must be one of: {', '.join(sorted(VALID_DOWNLOAD_FORMATS))}", workspace_id or "", run_id or "")
-    download_dir = _resolve_download_dir(download_dir)
+    download_dir = _resolve_download_dir(download_dir, fmt=fmt)
     try:
         os.makedirs(str(download_dir), exist_ok=True)
     except OSError as exc:

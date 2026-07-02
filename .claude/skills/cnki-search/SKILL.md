@@ -6,7 +6,8 @@ argument-hint: "search|fetch_details|download|export|discover_facets|inspect"
 
 # CNKI Search
 
-Use this skill from the project root. 
+Use this skill from the project root. In the distributed Claude layout, the
+skill lives at `.claude/skills/cnki-search`.
 
 ```powershell
 python .claude/skills/cnki-search/run.py --help
@@ -222,8 +223,10 @@ Options:
 - `--pending-only`: only rows not yet downloaded.
 - `--sample N`
 - `--format pdf|caj`: default `pdf`.
-- `--dir PATH`: download directory. Default is `<project-root>/cnki-downloads`;
-  relative paths resolve from the project root.
+- `--dir PATH`: download directory. Default is
+  `<project-root>/cnki-search-download/PDF` for PDF and
+  `<project-root>/cnki-search-download/CAJ` for CAJ; relative paths resolve
+  from the project root.
 - `--return-fields FIELD...`: usually `download_basic` or `download_full`.
 - `--redownload`: download again even if already downloaded.
 - `--concurrency N`: direct HTTP download concurrency. Defaults to

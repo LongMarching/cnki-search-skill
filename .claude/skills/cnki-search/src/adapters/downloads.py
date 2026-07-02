@@ -202,7 +202,9 @@ def download_direct_row(
     if error:
         return {**base, "status": "error", "error": error, "detail": detail}
 
-    target_dir = pathlib.Path(download_dir or os.environ.get("CNKI_DOWNLOAD_DIR", "cnki-downloads"))
+    configured_dir = str(download_dir or os.environ.get("CNKI_DOWNLOAD_DIR", "")).strip()
+    default_dir = pathlib.Path("cnki-search-download") / str(fmt or "pdf").upper()
+    target_dir = pathlib.Path(configured_dir) if configured_dir else default_dir
     target_dir.mkdir(parents=True, exist_ok=True)
     title = _safe_filename(str(row.get("title") or ""), str(row.get("global_rank") or row.get("row_id") or "cnki-download"))
     ext = _extension(response.headers, fmt)

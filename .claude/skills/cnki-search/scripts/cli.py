@@ -242,7 +242,7 @@ def build_parser():
     download.add_argument("--pending-only", action="store_true", help="Only download rows not yet downloaded")
     download.add_argument("--sample", type=int, metavar="N", help="Randomly sample N rows from the resolved candidate set")
     download.add_argument("--format", default="pdf", choices=["pdf", "caj"], help="Download format (default: pdf)")
-    download.add_argument("--dir", default=None, metavar="PATH", help="Download directory (default: <project-root>/cnki-downloads; relative paths resolve from project root)")
+    download.add_argument("--dir", default=None, metavar="PATH", help="Download directory (default: <project-root>/cnki-search-download/PDF or CAJ; relative paths resolve from project root)")
     download.add_argument("--return-fields", nargs="+", help="Field group(s) or field names to return (download_basic, download_full)")
     download.add_argument("--redownload", action="store_true", help="Re-download even if already downloaded")
     download.add_argument("--concurrency", type=int, metavar="N", help="HTTP direct download concurrency (default: CNKI_DOWNLOAD_MAX_CONCURRENCY or 4)")

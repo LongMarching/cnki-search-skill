@@ -37,7 +37,7 @@ class CnkiSearchHookTests(unittest.TestCase):
         self.assertEqual(output["hookEventName"], "PreToolUse")
         self.assertIn("PYTHONIOENCODING", command)
         self.assertIn("CNKI_WORKSPACE_DIR", command)
-        self.assertIn("CNKI_DOWNLOAD_DIR", command)
+        self.assertNotIn("CNKI_DOWNLOAD_DIR", command)
         self.assertIn(".claude/skills/cnki-search/run.py", command)
 
     def test_pre_tool_use_ignores_unrelated_command(self):

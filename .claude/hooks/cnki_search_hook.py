@@ -25,7 +25,6 @@ CNKI_RUN_RE = re.compile(
 DEFAULTS = {
     "PYTHONIOENCODING": "utf-8",
     "CNKI_WORKSPACE_DIR": ".claude/cnki-workspaces",
-    "CNKI_DOWNLOAD_DIR": "cnki-downloads",
 }
 
 
@@ -68,7 +67,6 @@ def prefix_powershell(command: str) -> str:
     parts = [
         "$env:PYTHONIOENCODING = if ($env:PYTHONIOENCODING) { $env:PYTHONIOENCODING } else { 'utf-8' }",
         "$env:CNKI_WORKSPACE_DIR = if ($env:CNKI_WORKSPACE_DIR) { $env:CNKI_WORKSPACE_DIR } else { '.claude/cnki-workspaces' }",
-        "$env:CNKI_DOWNLOAD_DIR = if ($env:CNKI_DOWNLOAD_DIR) { $env:CNKI_DOWNLOAD_DIR } else { 'cnki-downloads' }",
         command,
     ]
     return "; ".join(parts)
@@ -100,7 +98,7 @@ def context_message(event_name: str) -> dict[str, Any]:
             "additionalContext": (
                 "cnki-search is installed at .claude/skills/cnki-search. "
                 "Use python .claude/skills/cnki-search/run.py for CLI calls. "
-                "Workspace state defaults to .claude/cnki-workspaces and downloads default to cnki-downloads."
+                "Workspace state defaults to .claude/cnki-workspaces and downloads default to cnki-search-download/PDF or CAJ."
             ),
         }
     }

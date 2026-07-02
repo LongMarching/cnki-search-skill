@@ -156,7 +156,7 @@ dist/cnki-claude-bundle/
 ```bash
 export PYTHONIOENCODING=utf-8
 export CNKI_WORKSPACE_DIR=/path/to/cnki-workspaces
-export CNKI_DOWNLOAD_DIR=/path/to/cnki-downloads
+export CNKI_DOWNLOAD_DIR=/path/to/custom-download-dir
 export CNKI_COOKIE_FILE=/path/to/cnki-cookie.txt
 ```
 
