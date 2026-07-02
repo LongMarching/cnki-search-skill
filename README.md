@@ -1,5 +1,7 @@
 # CNKI Search Skill
 
+[中文说明](README.zh-CN.md)
+
 `cnki-search` is a Claude Code skill for CNKI literature retrieval. It provides
 a structured JSON CLI for paper search, details, facets, citation export,
 downloads, and workspace inspection.
