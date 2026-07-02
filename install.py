@@ -12,21 +12,26 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent
 
 SOURCE_FILES = (
-    ("agent/cnki-paper-retriever.md", ".claude/agents/cnki-paper-retriever.md"),
+    (".claude/agents/cnki-paper-retriever.md", ".claude/agents/cnki-paper-retriever.md"),
+    (".claude/hooks/cnki_search_hook.py", ".claude/hooks/cnki_search_hook.py"),
 )
 SOURCE_DIRS = (
-    ("skill/cnki-search", ".claude/skills/cnki-search"),
+    (".claude/skills/cnki-search", ".claude/skills/cnki-search"),
 )
 LEGACY_REMOVE_FILES = (
     ".claude/agents/academic-researcher.md",
     ".claude/agents/literature-retriever.md",
+    ".claude/hooks/cnki_session_hook.py",
+    ".claude/skills/cnki_session_registry.py",
     "agents/literature-retriever.md",
 )
 LEGACY_REMOVE_DIRS = (
+    ".claude/skills/paper-workflow",
     ".claude/skills/journal-workflow",
+    "skills/paper-workflow",
     "skills/journal-workflow",
 )
-SETTINGS_SNIPPET = "templates/settings.cnki-snippet.json"
+SETTINGS_SNIPPET = ".claude/settings.cnki-snippet.json"
 
 
 def load_json(path: Path) -> dict:
@@ -58,6 +63,8 @@ def copy_file(src: Path, dst: Path) -> None:
 
 
 def copy_tree(src_root: Path, dst_root: Path) -> None:
+    if src_root.resolve() == dst_root.resolve():
+        return
     if dst_root.exists():
         shutil.rmtree(dst_root)
     shutil.copytree(
@@ -65,6 +72,30 @@ def copy_tree(src_root: Path, dst_root: Path) -> None:
         dst_root,
         ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "*.pyo", "cnki-workspaces"),
     )
+
+
+def hook_key(value: object) -> str:
+    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+
+
+def merge_hooks(target_hooks: dict, snippet_hooks: dict) -> dict:
+    merged_hooks = dict(target_hooks)
+    for event_name, snippet_entries in snippet_hooks.items():
+        if not isinstance(snippet_entries, list):
+            raise ValueError(f"settings snippet hooks.{event_name} must be a list")
+
+        target_entries = merged_hooks.get(event_name)
+        if not isinstance(target_entries, list):
+            target_entries = []
+
+        seen = {hook_key(entry) for entry in target_entries}
+        for entry in snippet_entries:
+            key = hook_key(entry)
+            if key not in seen:
+                target_entries.append(entry)
+                seen.add(key)
+        merged_hooks[event_name] = target_entries
+    return merged_hooks
 
 
 def merge_settings(snippet_path: Path, target_settings_path: Path) -> Path | None:
@@ -86,7 +117,7 @@ def merge_settings(snippet_path: Path, target_settings_path: Path) -> Path | Non
     if not isinstance(target_hooks, dict):
         target_hooks = {}
 
-    merged["hooks"] = {**target_hooks, **snippet_hooks}
+    merged["hooks"] = merge_hooks(target_hooks, snippet_hooks)
     dump_json(target_settings_path, merged)
     return backup
 

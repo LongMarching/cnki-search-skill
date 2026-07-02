@@ -6,7 +6,7 @@ from pathlib import Path
 from unittest import mock
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-SKILL_DIR = REPO_ROOT / "skill" / "cnki-search"
+SKILL_DIR = REPO_ROOT / ".claude" / "skills" / "cnki-search"
 sys.path.insert(0, str(SKILL_DIR / "src"))
 sys.path.insert(0, str(SKILL_DIR.parent))
 sys.path.insert(0, str(REPO_ROOT / "tests"))

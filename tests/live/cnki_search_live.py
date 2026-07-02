@@ -1,6 +1,6 @@
 """Live test harness for the cnki-search skill.
 
-This script intentionally drives the public CLI in ``skill/cnki-search/run.py``
+This script intentionally drives the public CLI in ``.claude/skills/cnki-search/run.py``
 instead of importing workflow internals. Live execution must be explicitly
 enabled with CNKI_LIVE_TEST=1 and a legitimate CNKI cookie seed.
 """
@@ -19,7 +19,7 @@ from typing import Any
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-RUN_PY = REPO_ROOT / "skill" / "cnki-search" / "run.py"
+RUN_PY = REPO_ROOT / ".claude" / "skills" / "cnki-search" / "run.py"
 DEFAULT_DOWNLOAD_DIR = REPO_ROOT / "cnki-live-downloads"
 
 MAX_RATE = 50.0
@@ -370,7 +370,7 @@ class LiveHarness:
         configured = (env.get("CNKI_WORKSPACE_DIR") or os.environ.get("CNKI_WORKSPACE_DIR") or "").strip()
         if configured:
             return Path(configured)
-        return REPO_ROOT / "skill" / "cnki-search" / "cnki-workspaces"
+        return REPO_ROOT / ".claude" / "skills" / "cnki-search" / "cnki-workspaces"
 
     def load_stored_results(self, env: dict[str, str]) -> list[dict[str, Any]]:
         path = self.workflow_root(env) / self.workspace_id / "runs" / self.run_id / "results.json"

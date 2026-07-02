@@ -7,7 +7,7 @@ from unittest import mock
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-CNKI_SEARCH_SKILL_DIR = REPO_ROOT / "skill" / "cnki-search"
+CNKI_SEARCH_SKILL_DIR = REPO_ROOT / ".claude" / "skills" / "cnki-search"
 CNKI_SEARCH_SRC_DIR = CNKI_SEARCH_SKILL_DIR / "src"
 
 sys.path.insert(0, str(CNKI_SEARCH_SRC_DIR))

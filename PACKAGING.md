@@ -31,6 +31,7 @@ install.py
 INSTALL.md
 .claude/settings.cnki-snippet.json
 .claude/agents/cnki-paper-retriever.md
+.claude/hooks/cnki_search_hook.py
 .claude/skills/cnki-search/
 ```
 

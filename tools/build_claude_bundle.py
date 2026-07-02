@@ -11,10 +11,10 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = REPO_ROOT / "dist" / "cnki-claude-bundle"
 
 SKILL_DIRS = ("cnki-search",)
-ROOT_FILES = (
-)
-TEMPLATE_FILES = (
-    ("agent/cnki-paper-retriever.md", ".claude/agents/cnki-paper-retriever.md"),
+CLAUDE_FILES = (
+    ".claude/settings.cnki-snippet.json",
+    ".claude/agents/cnki-paper-retriever.md",
+    ".claude/hooks/cnki_search_hook.py",
 )
 
 
@@ -46,13 +46,6 @@ def copy_tree(src_root: Path, dst_root: Path) -> None:
         copy_file(src, dst)
 
 
-def rewrite_text(path: Path, replacements: list[tuple[str, str]]) -> None:
-    text = path.read_text(encoding="utf-8")
-    for old, new in replacements:
-        text = text.replace(old, new)
-    path.write_text(text, encoding="utf-8")
-
-
 def write_install_doc(bundle_root: Path) -> None:
     text = """# CNKI Claude Bundle
 
@@ -61,6 +54,7 @@ This bundle contains the shareable CNKI skills and agent assets:
 - `install.py`
 - `.claude/settings.cnki-snippet.json`
 - `.claude/agents/cnki-paper-retriever.md` (CNKI paper retrieval agent)
+- `.claude/hooks/cnki_search_hook.py` (Claude Code hook helper)
 - `.claude/skills/cnki-search/`
 
 ## Install Into Another Claude Project
@@ -76,9 +70,10 @@ python install.py
 The installer will:
 
 1. copy the CNKI skill and agent files into the target project
-2. merge the CNKI settings snippet into `.claude/settings.local.json`
-3. create a timestamped backup if `.claude/settings.local.json` already exists
-4. auto-detect the target project root from the bundle location
+2. copy the CNKI hook helper into `.claude/hooks/`
+3. merge the CNKI settings snippet into `.claude/settings.local.json`
+4. create a timestamped backup if `.claude/settings.local.json` already exists
+5. auto-detect the target project root from the bundle location
 
 ### Install from another location
 
@@ -96,33 +91,20 @@ After install, reopen the Claude project so settings reload.
     (bundle_root / "INSTALL.md").write_text(text, encoding="utf-8")
 
 
-def write_settings_snippet(bundle_root: Path) -> None:
-    src = REPO_ROOT / "templates" / "settings.cnki-snippet.json"
-    dst = bundle_root / ".claude" / "settings.cnki-snippet.json"
-    copy_file(src, dst)
-
-
 def build_bundle(output_root: Path) -> None:
     if output_root.exists():
         shutil.rmtree(output_root)
     output_root.mkdir(parents=True, exist_ok=True)
 
-    for src_rel, dst_rel in TEMPLATE_FILES:
-        copy_file(REPO_ROOT / src_rel, output_root / dst_rel)
+    for rel_path in CLAUDE_FILES:
+        copy_file(REPO_ROOT / rel_path, output_root / rel_path)
 
-    write_settings_snippet(output_root)
     copy_file(REPO_ROOT / "tools" / "install_claude_bundle.py", output_root / "install.py")
 
     for skill_dir in SKILL_DIRS:
-        src = REPO_ROOT / "skill" / skill_dir
+        src = REPO_ROOT / ".claude" / "skills" / skill_dir
         dst = output_root / ".claude" / "skills" / skill_dir
         copy_tree(src, dst)
-        rewrite_text(
-            dst / "SKILL.md",
-            [
-                ("cd skill/cnki-search", "cd .claude/skills/cnki-search"),
-            ],
-        )
 
     write_install_doc(output_root)
 

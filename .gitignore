@@ -8,7 +8,8 @@ dist/
 build/
 
 # CNKI runtime state and downloaded files
-skill/cnki-search/cnki-workspaces/
+.claude/skills/cnki-search/cnki-workspaces/
+.claude/cnki-workspaces/
 cnki-workspaces/
 cnki-downloads/
 cnki-live-downloads/

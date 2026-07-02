@@ -33,6 +33,8 @@ The installer writes:
     settings.local.json
     agents/
       cnki-paper-retriever.md
+    hooks/
+      cnki_search_hook.py
     skills/
       cnki-search/
 ```
@@ -58,7 +60,7 @@ The command should return structured JSON with `status`, `workspace_id`,
 The cloned repository can also run the skill directly:
 
 ```bash
-python skill/cnki-search/run.py search "机器学习" --page 1
+python .claude/skills/cnki-search/run.py search "机器学习" --page 1
 ```
 
 No package installation is required for the offline code path; the skill uses
@@ -80,6 +82,7 @@ dist/cnki-claude-bundle/
   INSTALL.md
   .claude/settings.cnki-snippet.json
   .claude/agents/cnki-paper-retriever.md
+  .claude/hooks/cnki_search_hook.py
   .claude/skills/cnki-search/
 ```
 

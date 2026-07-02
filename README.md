@@ -38,6 +38,7 @@ The installer copies:
 ```text
 .claude/skills/cnki-search/
 .claude/agents/cnki-paper-retriever.md
+.claude/hooks/cnki_search_hook.py
 ```
 
 It also merges this repository's Claude Code settings snippet into
@@ -55,13 +56,14 @@ python .claude/skills/cnki-search/run.py search "机器学习" --page 1
 ## Repository Layout
 
 ```text
-install.py                  # clone-repo installer for Claude Code projects
-skill/cnki-search/          # complete skill source and CLI
-agent/                      # Claude Code agent template
-tools/                      # optional bundle builder and bundle installer
-tests/                      # offline tests and guarded live harness
-docs/                       # installation and development notes
-templates/                  # Claude settings snippet used by install.py
+install.py                         # clone-repo installer for Claude Code projects
+.claude/settings.cnki-snippet.json # Claude Code hooks/settings snippet
+.claude/agents/                   # Claude Code agent template
+.claude/hooks/                    # Claude Code hook helper
+.claude/skills/cnki-search/       # complete skill source and CLI
+tools/                            # optional bundle builder and bundle installer
+tests/                            # offline tests and guarded live harness
+docs/                             # installation and development notes
 ```
 
 ## Direct Development Use
@@ -69,14 +71,14 @@ templates/                  # Claude settings snippet used by install.py
 From the cloned repository root:
 
 ```bash
-python skill/cnki-search/run.py search "机器学习" --page 1 --output-limit 5 --return-fields search_basic
+python .claude/skills/cnki-search/run.py search "机器学习" --page 1 --output-limit 5 --return-fields search_basic
 ```
 
 PowerShell users should set UTF-8 output first:
 
 ```powershell
 $env:PYTHONIOENCODING = 'utf-8'
-python skill/cnki-search/run.py search "机器学习" --page 1 --output-limit 5 --return-fields search_basic
+python .claude/skills/cnki-search/run.py search "机器学习" --page 1 --output-limit 5 --return-fields search_basic
 ```
 
 Every command prints JSON. Use `status`, `workspace_id`, `run_id`, `summary`,
@@ -85,15 +87,15 @@ Every command prints JSON. Use `status`, `workspace_id`, `run_id`, `summary`,
 ## Main Commands
 
 ```bash
-python skill/cnki-search/run.py search "机器学习" --pages 1-2 --sort citations
-python skill/cnki-search/run.py fetch_details --workspace WORKSPACE --run RUN --top 10
-python skill/cnki-search/run.py discover_facets --workspace WORKSPACE --run RUN --group subdiscipline
-python skill/cnki-search/run.py export --workspace WORKSPACE --run RUN --rows 1-5 --mode GBTREFER BibTex
-python skill/cnki-search/run.py download --workspace WORKSPACE --run RUN --rows 1-3 --format pdf
-python skill/cnki-search/run.py inspect --workspace WORKSPACE --run RUN --view rows
+python .claude/skills/cnki-search/run.py search "机器学习" --pages 1-2 --sort citations
+python .claude/skills/cnki-search/run.py fetch_details --workspace WORKSPACE --run RUN --top 10
+python .claude/skills/cnki-search/run.py discover_facets --workspace WORKSPACE --run RUN --group subdiscipline
+python .claude/skills/cnki-search/run.py export --workspace WORKSPACE --run RUN --rows 1-5 --mode GBTREFER BibTex
+python .claude/skills/cnki-search/run.py download --workspace WORKSPACE --run RUN --rows 1-3 --format pdf
+python .claude/skills/cnki-search/run.py inspect --workspace WORKSPACE --run RUN --view rows
 ```
 
-The full command reference lives in [skill/cnki-search/SKILL.md](skill/cnki-search/SKILL.md).
+The full command reference lives in [.claude/skills/cnki-search/SKILL.md](.claude/skills/cnki-search/SKILL.md).
 
 ## Optional Bundle Build
 
@@ -115,7 +117,7 @@ guarded states such as `captcha`, `login_required`, `permission_denied`,
 
 ```bash
 python -m unittest discover -s tests -v
-python -m py_compile install.py skill/cnki-search/run.py skill/cnki-search/scripts/cli.py skill/cnki-search/src/actions/_workflow_impl.py
+python -m py_compile install.py .claude/skills/cnki-search/run.py .claude/skills/cnki-search/scripts/cli.py .claude/skills/cnki-search/src/actions/_workflow_impl.py
 ```
 
 Live CNKI validation is opt-in:
