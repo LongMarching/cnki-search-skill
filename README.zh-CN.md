@@ -4,6 +4,22 @@
 
 这个仓库可以直接 clone，然后运行顶层 `install.py` 安装到目标 Claude Code 项目的 `.claude` 目录。
 
+## 功能总览
+
+| 功能 | 说明 | 主要命令或文件 |
+| --- | --- | --- |
+| 论文检索 | 支持关键词、高级字段、专业表达式、作者检索、句子检索；支持分页、排序、文献类型、学科、期刊质量、时间范围和表单过滤。 | `search` |
+| Workspace/Run 状态 | 每次检索保存为可复用的 workspace/run，后续动作可以复用同一批结果，不必重复检索。 | `workspace_id`、`run_id` |
+| 结果检查 | 查看 workspace 摘要、run 列表、已存储结果行、指定页或指定行范围。 | `inspect` |
+| 详情抓取 | 抓取详情页并保存摘要、关键词、基金、分类号、出版信息、作者/机构信息，以及发现的 PDF/CAJ 链接。 | `fetch_details` |
+| 分面发现 | 基于已存储检索重放页面，读取结果页可用分面选项，目前支持子学科分面。 | `discover_facets` |
+| 引文导出 | 导出 `GBTREFER`、`MLA`、`APA`、`BibTex`、`EndNote`、`NoteExpress`、`Refworks`、`NodeFirst`、`REFER`、`NEW` 等格式。 | `export` |
+| PDF/CAJ 下载 | 按行下载 PDF 或 CAJ，默认保存到 `<项目根>/cnki-search-download/PDF` 或 `<项目根>/cnki-search-download/CAJ`。 | `download` |
+| Claude Code 安装 | 把 skill、agent、hook helper 和 settings snippet 安装到目标 Claude Code 项目。 | `install.py` |
+| Claude Agent | 提供 `cnki-paper-retriever` agent 模板，用于论文检索工作流。 | `.claude/agents/cnki-paper-retriever.md` |
+| Claude Hooks | 提供会话上下文和安全 CLI 默认值，不强制覆盖下载目录。 | `.claude/hooks/cnki_search_hook.py` |
+| 访问状态报告 | 将 CNKI 的 guarded 状态以 JSON 返回，例如 captcha、login_required、permission_denied、source_app_invalid、empty_body、format_mismatch。 | JSON `status`、`error`、`warnings` |
+
 ## 安装到 Claude Code
 
 推荐把仓库 clone 到需要安装 skill 的 Claude Code 项目里：

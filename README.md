@@ -9,6 +9,22 @@ downloads, and workspace inspection.
 The repository is designed to be cloned directly, then installed into any
 Claude Code project with the top-level `install.py` script.
 
+## Feature Overview
+
+| Area | What it does | Main command or file |
+| --- | --- | --- |
+| Paper search | Search CNKI by keyword, advanced fields, professional expression, author, or sentence proximity. Supports pages, sorting, document type, discipline, quality, date, and form filters. | `search` |
+| Workspace/run state | Stores each search as a reusable workspace/run so later actions can reuse the same result set without searching again. | `workspace_id`, `run_id` |
+| Result inspection | Lists workspace summaries, runs, stored rows, selected pages, or selected row ranges. | `inspect` |
+| Detail fetching | Fetches detail pages and stores abstracts, keywords, fund info, classifications, publication info, author/affiliation data, and discovered PDF/CAJ links. | `fetch_details` |
+| Facet discovery | Replays a stored search and reads available result-page facet options, currently subdiscipline facets. | `discover_facets` |
+| Citation export | Exports bibliography/citation text in formats such as `GBTREFER`, `MLA`, `APA`, `BibTex`, `EndNote`, `NoteExpress`, `Refworks`, `NodeFirst`, `REFER`, and `NEW`. | `export` |
+| PDF/CAJ download | Downloads selected rows as PDF or CAJ. Default output is `<project-root>/cnki-search-download/PDF` or `<project-root>/cnki-search-download/CAJ`. | `download` |
+| Claude Code install | Installs the skill, agent, hook helper, and settings snippet into a target Claude Code project. | `install.py` |
+| Claude agent support | Provides a `cnki-paper-retriever` agent template for retrieval workflows. | `.claude/agents/cnki-paper-retriever.md` |
+| Claude hooks | Adds session context and safe CLI defaults for Claude Code runs without forcing a download directory override. | `.claude/hooks/cnki_search_hook.py` |
+| Access-state reporting | Reports guarded CNKI states as JSON, including captcha, login-required, permission-denied, source-app-invalid, empty-body, and format-mismatch. | JSON `status`, `error`, `warnings` |
+
 ## Install Into Claude Code
 
 Clone this repository:
